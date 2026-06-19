@@ -15,12 +15,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Select Xcode 16.4
-        run: |
-          XCODE_PATH=$(ls /Applications/Xcode*.app/Contents/Developer | head -1)
-          sudo xcode-select -s "$XCODE_PATH"
-          xcodebuild -version
-
       - name: Build DMG
         working-directory: Textream
         run: |
