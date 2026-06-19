@@ -91,6 +91,19 @@ struct SpeechScrollView: View {
     var smoothWordProgress: Double = 0
 
     var isListening: Bool = true
+
+    init(words: [String], highlightedCharCount: Int, font: NSFont = .systemFont(ofSize: 18, weight: .semibold), highlightColor: Color = .white, onWordTap: ((Int) -> Void)? = nil, onManualScroll: ((Bool, Double) -> Void)? = nil, smoothScroll: Bool = false, smoothWordProgress: Double = 0, isListening: Bool = true) {
+        self.words = words
+        self.highlightedCharCount = highlightedCharCount
+        self.font = font
+        self.highlightColor = highlightColor
+        self.onWordTap = onWordTap
+        self.onManualScroll = onManualScroll
+        self.smoothScroll = smoothScroll
+        self.smoothWordProgress = smoothWordProgress
+        self.isListening = isListening
+    }
+
     @State private var scrollOffset: CGFloat = 0
     @State private var manualOffset: CGFloat = 0
     @State private var wordYPositions: [Int: CGFloat] = [:]
