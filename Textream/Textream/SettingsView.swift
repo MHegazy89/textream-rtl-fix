@@ -216,9 +216,8 @@ struct NotchPreviewContent: View {
                         highlightedCharCount: settings.listeningMode == .wordTracking ? highlightedCount : Self.loremWords.count * 5,
                         font: settings.font,
                         highlightColor: settings.fontColorPreset.color,
-                        cueColor: settings.cueColorPreset.color,
-                        cueUnreadOpacity: settings.cueBrightness.unreadOpacity,
-                        cueReadOpacity: settings.cueBrightness.readOpacity,
+                        onWordTap: nil,
+                        onManualScroll: nil,
                         smoothScroll: settings.listeningMode != .wordTracking,
                         smoothWordProgress: previewWordProgress,
                         isListening: settings.listeningMode != .wordTracking
