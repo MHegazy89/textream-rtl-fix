@@ -15,17 +15,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build with SPM
+      - name: Select Xcode 16.4
         run: |
-          swift build -c release --product Textream
-          mkdir -p build/release
-          cp .build/release/Textream build/release/
-          cd build/release && tar czf Textream-macos-arm64.tar.gz Textream
+          XCODE_PATH=$(ls /Applications/Xcode*.app/Contents/Developer | head -1)
+          sudo xcode-select -s "$XCODE_PATH"
+          xcodebuild -version
+
+      - name: Build DMG
+        working-directory: Textream
+        run: |
+          chmod +x build.sh
+          ./build.sh
 
       - uses: actions/upload-artifact@v4
         with:
-          name: Textream-macos-arm64
-          path: build/release/Textream-macos-arm64.tar.gz
+          name: Textream-DMG
+          path: Textream/build/release/Textream.dmg
           if-no-files-found: error
 
   release:
@@ -35,14 +40,14 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: Textream-macos-arm64
+          name: Textream-DMG
           path: .
       - uses: softprops/action-gh-release@v2
         with:
-          files: Textream-macos-arm64.tar.gz
-          name: Textream ${{ github.ref_name }}
+          files: Textream.dmg
+          name: Textream \${{ github.ref_name }}
           body: |
             ### Installation
-            1. Download the tarball
-            2. Extract: `tar xzf Textream-macos-arm64.tar.gz`
-            3. Move to PATH: `sudo mv Textream /usr/local/bin/`
+            1. Download and open the DMG
+            2. Drag **Textream** to Applications
+            3. If blocked: `xattr -cr /Applications/Textream.app`
