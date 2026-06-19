@@ -81,6 +81,9 @@ struct SpeechScrollView: View {
     let highlightedCharCount: Int
     var font: NSFont = .systemFont(ofSize: 18, weight: .semibold)
     var highlightColor: Color = .white
+    var cueColor: Color = .white
+    var cueUnreadOpacity: Double = 0.2
+    var cueReadOpacity: Double = 0.5
     var onWordTap: ((Int) -> Void)? = nil
     /// Called when user starts/stops manual scrolling in smooth mode.
     /// Bool: true = scrolling started (pause timer), false = scrolling ended (resume timer).
@@ -92,11 +95,14 @@ struct SpeechScrollView: View {
 
     var isListening: Bool = true
 
-    init(words: [String], highlightedCharCount: Int, font: NSFont = .systemFont(ofSize: 18, weight: .semibold), highlightColor: Color = .white, onWordTap: ((Int) -> Void)? = nil, onManualScroll: ((Bool, Double) -> Void)? = nil, smoothScroll: Bool = false, smoothWordProgress: Double = 0, isListening: Bool = true) {
+    init(words: [String], highlightedCharCount: Int, font: NSFont = .systemFont(ofSize: 18, weight: .semibold), highlightColor: Color = .white, cueColor: Color = .white, cueUnreadOpacity: Double = 0.2, cueReadOpacity: Double = 0.5, onWordTap: ((Int) -> Void)? = nil, onManualScroll: ((Bool, Double) -> Void)? = nil, smoothScroll: Bool = false, smoothWordProgress: Double = 0, isListening: Bool = true) {
         self.words = words
         self.highlightedCharCount = highlightedCharCount
         self.font = font
         self.highlightColor = highlightColor
+        self.cueColor = cueColor
+        self.cueUnreadOpacity = cueUnreadOpacity
+        self.cueReadOpacity = cueReadOpacity
         self.onWordTap = onWordTap
         self.onManualScroll = onManualScroll
         self.smoothScroll = smoothScroll
