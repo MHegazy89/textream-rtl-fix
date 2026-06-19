@@ -221,6 +221,9 @@ struct NotchPreviewContent: View {
                         cueReadOpacity: settings.cueBrightness.readOpacity,
                         onWordTap: nil,
                         onManualScroll: nil,
+                        smoothScroll: settings.listeningMode != .wordTracking,
+                        smoothWordProgress: previewWordProgress,
+                        isListening: settings.listeningMode != .wordTracking
                     )
                     .padding(.horizontal, 16)
                     .padding(.top, 10)
