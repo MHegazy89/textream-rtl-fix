@@ -20,17 +20,12 @@ jobs:
           swift build -c release --product Textream
           mkdir -p build/release
           cp .build/release/Textream build/release/
-
-      - name: Create DMG
-        run: |
-          mkdir -p /tmp/dmg_staging
-          cp -r build/release/Textream /tmp/dmg_staging/
-          hdiutil create -volname "Textream" -srcfolder /tmp/dmg_staging -ov -format UDZO build/release/Textream.dmg
+          cd build/release && tar czf Textream-macos-arm64.tar.gz Textream
 
       - uses: actions/upload-artifact@v4
         with:
-          name: Textream-DMG
-          path: build/release/Textream.dmg
+          name: Textream-macos-arm64
+          path: build/release/Textream-macos-arm64.tar.gz
           if-no-files-found: error
 
   release:
@@ -40,14 +35,14 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: Textream-DMG
+          name: Textream-macos-arm64
           path: .
       - uses: softprops/action-gh-release@v2
         with:
-          files: Textream.dmg
+          files: Textream-macos-arm64.tar.gz
           name: Textream ${{ github.ref_name }}
           body: |
             ### Installation
-            1. Download and open the DMG
-            2. Drag **Textream** to Applications
-            3. If blocked: `xattr -cr /Applications/Textream.app`
+            1. Download the tarball
+            2. Extract: `tar xzf Textream-macos-arm64.tar.gz`
+            3. Move to PATH: `sudo mv Textream /usr/local/bin/`
