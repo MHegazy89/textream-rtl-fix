@@ -14,13 +14,23 @@ jobs:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
-      - name: Build universal DMG
-        working-directory: Textream
-        run: chmod +x build.sh && ./build.sh
+
+      - name: Build with SPM
+        run: |
+          swift build -c release --product Textream
+          mkdir -p build/release
+          cp .build/release/Textream build/release/
+
+      - name: Create DMG
+        run: |
+          mkdir -p /tmp/dmg_staging
+          cp -r build/release/Textream /tmp/dmg_staging/
+          hdiutil create -volname "Textream" -srcfolder /tmp/dmg_staging -ov -format UDZO build/release/Textream.dmg
+
       - uses: actions/upload-artifact@v4
         with:
           name: Textream-DMG
-          path: Textream/build/release/Textream.dmg
+          path: build/release/Textream.dmg
           if-no-files-found: error
 
   release:
@@ -35,7 +45,7 @@ jobs:
       - uses: softprops/action-gh-release@v2
         with:
           files: Textream.dmg
-          name: Textream \${{ github.ref_name }}
+          name: Textream ${{ github.ref_name }}
           body: |
             ### Installation
             1. Download and open the DMG
